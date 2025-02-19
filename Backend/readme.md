@@ -1,44 +1,83 @@
-# /users/register Endpoint Documentation
+# 📌 `/users/register` Endpoint Documentation
 
-## Description
+## **Endpoint:**
+`POST /users/register`
 
-This endpoint is used to register a new user in the system. It requires specific user details to be provided in the request body.
+## **Description:**
+This endpoint allows users to **register** by providing their fullname, email, and password.
 
-## Request Body
+## **Request Format:**
+- **Content-Type:** `application/json`
+- **Method:** `POST`
 
-The request body should be a JSON object with the following fields:
-
--   `username`: (string, required) The username for the new user.
--   `email`: (string, required) The email address for the new user. Must be a valid email format.
--   `password`: (string, required) The password for the new user.  Should meet minimum complexity requirements (e.g., minimum length).
--   `phone`: (string, required) The phone number for the new user.
--   `location`: (string, optional) The location of the new user.
-
-Example:
-
+## **Request Body:**
 ```json
 {
-    "username": "johndoe",
-    "email": "john.doe@example.com",
-    "password": "securePassword123",
-    "phone": "123-456-7890",
-    "location": "New York"
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com",
+  "password": "password123"
 }
 ```
 
-## Response Status Codes
-
--   `201 Created`:  The user was successfully registered.
--   `400 Bad Request`: The request body is invalid or missing required fields.  The response body will contain details about the validation errors.
--   `409 Conflict`:  A user with the provided username or email already exists.
--   `500 Internal Server Error`: An unexpected error occurred on the server.
-
-## Example Success Response
-
+## **Response:**
+### ✅ **Success Response:**
+- **Status Code:** `201 Created`
+- **Description:** User registered successfully.
+- **Response Body:**
 ```json
 {
-    "message": "User registered successfully",
-    "userId": "uniqueUserId123"
+  "token": "<JWT_TOKEN>",
+  "user": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com"
+  }
 }
 ```
 
+### ❌ **Error Responses:**
+#### 1️⃣ **Validation Error:**
+- **Status Code:** `400 Bad Request`
+- **Description:** Input validation failed.
+- **Response Body:**
+```json
+{
+  "error": [
+    {
+      "msg": "Invalid Email",
+      "param": "email"
+    }
+  ]
+}
+```
+
+#### 2️⃣ **Missing Required Fields:**
+- **Status Code:** `400 Bad Request`
+- **Description:** Required fields are missing.
+- **Response Body:**
+```json
+{
+  "error": "All fields are required"
+}
+```
+
+#### 3️⃣ **Email Already Exists:**
+- **Status Code:** `409 Conflict`
+- **Description:** The email is already registered.
+- **Response Body:**
+```json
+{
+  "error": "Email is already in use"
+}
+```
+
+## **Notes:**
+- The password must be at least **6 characters long**.
+- The firstname must be at least **3 characters long**.
+- The email should be a **valid email format**.
+- A **JWT token** is returned upon successful registration.
