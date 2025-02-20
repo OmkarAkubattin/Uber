@@ -150,3 +150,83 @@ This endpoint allows users to **login** by providing their email and password.
 - The password must be at least **6 characters long**.
 - The email should be a **valid email format**.
 - A **JWT token** is returned upon successful login.
+
+# 📌 `/users/profile` Endpoint Documentation
+
+## **Endpoint:**
+`GET /users/profile`
+
+## **Description:**
+This endpoint allows authenticated users to **retrieve their profile information**.
+
+## **Request Format:**
+- **Content-Type:** `application/json`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
+
+## **Response:**
+### ✅ **Success Response:**
+- **Status Code:** `200 OK`
+- **Description:** User profile retrieved successfully.
+- **Response Body:**
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "johndoe@example.com"
+}
+```
+
+### ❌ **Error Responses:**
+#### 1️⃣ **Unauthorized:**
+- **Status Code:** `401 Unauthorized`
+- **Description:** Missing or invalid token.
+- **Response Body:**
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+## **Notes:**
+- The request must include a valid **JWT token** in the `Authorization` header.
+
+# 📌 `/users/logout` Endpoint Documentation
+
+## **Endpoint:**
+`GET /users/logout`
+
+## **Description:**
+This endpoint allows authenticated users to **logout** by invalidating their token.
+
+## **Request Format:**
+- **Content-Type:** `application/json`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <JWT_TOKEN>`
+
+## **Response:**
+### ✅ **Success Response:**
+- **Status Code:** `200 OK`
+- **Description:** User logged out successfully.
+- **Response Body:**
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+### ❌ **Error Responses:**
+#### 1️⃣ **Unauthorized:**
+- **Status Code:** `401 Unauthorized`
+- **Description:** Missing or invalid token.
+- **Response Body:**
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+## **Notes:**
+- The request must include a valid **JWT token** in the `Authorization` header.
