@@ -19,5 +19,4 @@ router.get('/profile', authorization.authUser, userController.getUserProfile);
 
 router.get('/logout', authorization.authUser, userController.logoutUser);
 
-
 module.exports = router;

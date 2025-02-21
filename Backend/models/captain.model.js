@@ -67,7 +67,7 @@ const captainSchema = new mongoose.Schema({
 
 // ✅ Fix: Corrected method name
 captainSchema.methods.generateAuthToken = function() {
-    return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+    return jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: "1m" });
 };
 
 // ✅ Fix: Added password parameter
@@ -82,4 +82,6 @@ captainSchema.statics.hashPassword = async function(password) {
 };
 
 
-const captainModel = mongoose.model('captain', captainSchema);
+const captainModel = mongoose.model('captains', captainSchema);
+
+module.exports = captainModel;

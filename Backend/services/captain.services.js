@@ -10,7 +10,7 @@ module.exports.createCaptain = async ({ email, password, fullname, vehicle }) =>
             firstname: fullname.firstname,
             lastname: fullname.lastname,
         },
-        email: email,
+        email,
         password: password,
         vehicle: {
             color: vehicle.color,
@@ -19,6 +19,6 @@ module.exports.createCaptain = async ({ email, password, fullname, vehicle }) =>
             vehicleType: vehicle.vehicleType,
         },
     });
-
+    console.log(captain);
     return captain;
 }

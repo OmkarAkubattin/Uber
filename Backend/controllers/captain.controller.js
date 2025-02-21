@@ -1,8 +1,10 @@
 const captainModel = require('../models/captain.model');
 const captainService = require('../services/captain.services');
 const { validationResult } = require('express-validator');
+const BlacklistTokenModel = require('../models/backlistToken.model');
 
 module.exports.registerCaptain = async (req, res) => {
+  try{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array() });
@@ -20,7 +22,7 @@ module.exports.registerCaptain = async (req, res) => {
     const captain = await captainService.createCaptain({
         firstname: fullname.firstname,
         lastname: fullname.lastname,
-        email: email,
+        email,
         password: hashPassword,
         vehicle: {
             color: vehicle.color,
@@ -30,8 +32,54 @@ module.exports.registerCaptain = async (req, res) => {
         }
     });
 
-    const token = captainModel.generateToken();
-
+    const token = captain.generateAuthToken();
     res.status(201).json({ token });
+  }catch(error){
+    console.error('Register error:', error);
+  }
 
+}
+
+module.exports.loginCaptain = async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
+      }
+  
+      const { email, password } = req.body;
+
+      const captain = await captainModel.findOne({ email }).select('+password');
+      if (!captain) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      const isMatch = await captainModel.comparePassword(password); // Await the function
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      const token = captain.generateAuthToken();
+      res.cookie('token', token);
+
+
+  
+      res.status(200).json({ token, captain });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+
+module.exports.getCaptainProfile = (req, res) => {
+    res.status(200).json(req.captain);
+}
+  
+module.exports.logoutCaptain = async (req, res) => {
+    res.clearCookie('token');
+    const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+  
+    await BlacklistTokenModel.create({token});
+  
+    res.status(200).json({ message: 'Logout successful' });
 }

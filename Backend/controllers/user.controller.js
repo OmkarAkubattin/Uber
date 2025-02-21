@@ -3,8 +3,7 @@ const userService = require("../services/user.services");
 const { validationResult } = require("express-validator");
 const BlacklistTokenModel = require("../models/backlistToken.model");
 
-const registerUser = async (req, res, next) => {
-  try {
+module.exports.registerUser = async (req, res) => {
     // Validate request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -34,12 +33,9 @@ const registerUser = async (req, res, next) => {
     const token = user.generateAuthToken();
 
     res.status(201).json({ token, user });
-  } catch (error) {
-    next(error);
-  }
 };
 
-const loginUser = async (req, res, next) => {
+module.exports.loginUser = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -68,11 +64,11 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-const getUserProfile = (req, res, next) => {
+module.exports.getUserProfile = (req, res) => {
   res.status(200).json(req.user);
 }
 
-const logoutUser = async (req, res, next) => {
+module.exports.logoutUser = async (req, res) => {
   res.clearCookie('token');
   const token = req.cookies.token || req.headers.authorization.split(' ')[1];
 
@@ -80,4 +76,5 @@ const logoutUser = async (req, res, next) => {
 
   res.status(200).json({ message: 'Logout successful' });
 }
-module.exports = { registerUser, loginUser, getUserProfile, logoutUser };
+
+// module.exports = { registerUser, loginUser, getUserProfile, logoutUser };
