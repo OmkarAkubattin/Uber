@@ -45,7 +45,7 @@ const CaptainLogin = () => {
             required
           />
           <button className="flex items-center justify-center w-full bg-black text-white font-medium py-3 rounded mt-5">
-            Log in
+          Log in as Captain
           </button>
         </form>
         <p className="text-center mt-3">

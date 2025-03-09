@@ -1,29 +1,38 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"
+import { useState, useContext } from "react"
+import axios from 'axios'
+import { UserDataContext } from "../context/UserContext";
 
 const UserSignup = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  // const [userData, setUserData] = useState({})
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setUserData({
-      fullName: {
-        firstName: firstName,
-        lastName: lastName,
+  const navigate = useNavigate()
+
+  const { user, setUser } = useContext(UserDataContext)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const newUser = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
       },
       email: email,
       password: password,
-    });
-    console.log(userData);
-    setFirstName("");
-    setLastName("");
-    setEmail("");
-    setPassword("");
-  };
+    }
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+    console.log(response.status)
+    if(response.status === 200){
+      const data = response.data
+      setUser(data.user)
+      localStorage.setItem('token', data.token)
+      navigate('/home')
+    }
+  }
   return (
     <div className="p-7 h-screen flex flex-col justify-between">
       <div>
@@ -34,7 +43,7 @@ const UserSignup = () => {
         />
         <form action="" onSubmit={handleSubmit}>
         <h3 className="text-lg font-medium mb-2">
-              What&apos;s your First Name?
+              What&aposs your First Name?
             </h3>
           <div className="flex gap-4 mb-4">
             <input
@@ -54,7 +63,7 @@ const UserSignup = () => {
               required
             />
           </div>
-          <h3 className="text-lg font-medium mb-2">What&apos;s your Email?</h3>
+          <h3 className="text-lg font-medium mb-2">What&aposs your Email?</h3>
           <input
             className="bg-[#eeeeee] mb-4 rounded px-4 py-2 border border-gray-200 w-full text-lg placeholder:text-base"
             type="email"
@@ -84,7 +93,7 @@ const UserSignup = () => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserSignup;
+export default UserSignup
