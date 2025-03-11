@@ -39,6 +39,7 @@ const CaptainSignup = () => {
     );
     if (response.status === 200) {
       const data = response.data;
+      console.log(data.token);
       setCaptain(data.captain);
       localStorage.setItem("token", data.token);
       navigate("/captain-home");
@@ -93,7 +94,7 @@ const CaptainSignup = () => {
             required
           />
           <div className="flex gap-4 mb-3">
-            <div>
+            <div className="grow-6">
               <h3 className="text-lg font-medium mb-2">
               Vehicle Color:
               </h3>
@@ -106,7 +107,7 @@ const CaptainSignup = () => {
                 required
               />
             </div>
-            <div>
+            <div className="grow-6">
               <h3 className="text-lg font-medium mb-2">
               Vehicle Plate No.:
               </h3>
@@ -121,12 +122,12 @@ const CaptainSignup = () => {
             </div>
           </div>
           <div className="flex gap-4 mb-3">
-            <div>
+            <div className="grow-5">
               <h3 className="text-lg font-medium mb-2">
-              Vehicle Capacity:
+              Capacity:
               </h3>
               <input
-                className="bg-[#eeeeee] rounded px-4 py-2 border border-gray-200 w-full text-lg placeholder:text-base"
+                className="bg-[#eeeeee] rounded px-4 py-[.44rem] border border-gray-200 w-full text-lg placeholder:text-base"
                 type="Number"
                 placeholder="4"
                 value={capacity}
@@ -136,7 +137,7 @@ const CaptainSignup = () => {
                 max={8}
               />
             </div>
-            <div>
+            <div className="grow-7">
               <h3 className="text-lg font-medium mb-2">
               Vehicle Type:
               </h3>
@@ -151,14 +152,6 @@ const CaptainSignup = () => {
                 <option value="motorcar">Motorcar</option>
                 <option value="auto">Auto</option>
               </select>
-              {/* <input
-                className="bg-[#eeeeee] rounded px-4 py-2 border border-gray-200 w-full text-lg placeholder:text-base"
-                type="text"
-                placeholder="Car / Motorcar / Auto"
-                value={vehicleType}
-                onChange={(e) => setVehicleType(e.target.value)}
-                required */}
-              {/* /> */}
             </div>
           </div>
           <button className="flex items-center justify-center w-full bg-black text-white font-medium py-3 rounded mt-5">
